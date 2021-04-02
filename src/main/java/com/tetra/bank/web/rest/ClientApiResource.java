@@ -50,7 +50,7 @@ public class ClientApiResource {
                 .body(result);
     }
 
-    @GetMapping("clients")
+    @GetMapping("/clients")
     public List<ClientDTO> getAllClients(){
         log.debug("REST request to get all clients");
         List<Client> clients = clientRepository.findAll();

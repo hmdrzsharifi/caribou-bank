@@ -6,9 +6,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-const AddOffice = (props) => {
+const AddClient = (props) => {
     const [open, setOpen] = useState(false);
-    const [office, setOffice] = useState({name: '', openingDate: '', externalId: '', parent:''});
+    const [client, setClient] = useState({firstname: '', lastname: ''});
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -19,31 +19,33 @@ const AddOffice = (props) => {
     };
 
     const handleChange = (event) => {
-        setOffice({...office, [event.target.name]: event.target.value});
+        setClient({...client, [event.target.name]: event.target.value});
     }
 
-    // Save car and close modal form
+    // Save Client and close modal form
     const handleSave = () => {
-        props.addOffice(office);
+        props.addClient(client);
         handleClose();
     }
 
     return (
         <div>
             <Button variant="outlined" color="primary" style={{margin: 10}} onClick={handleClickOpen}>
-                New Office
+                New Client
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>New Office</DialogTitle>
+                <DialogTitle>New Client</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus fullWidth label="Name" name="name"
-                               value={office.name} onChange={handleChange}/>
-                    <TextField fullWidth label="Opening Date" name="openingDate"
-                               value={office.openingDate} onChange={handleChange}/>
-                    <TextField fullWidth label="External Id" name="externalId"
-                               value={office.externalId} onChange={handleChange}/>
-                    <TextField fullWidth label="Parent" name="parent"
-                               value={office.parent} onChange={handleChange}/>
+                    <TextField autoFocus fullWidth label="Brand" name="brand"
+                               value={client.firstname} onChange={handleChange}/>
+                    <TextField fullWidth label="Model" name="model"
+                               value={client.lastname} onChange={handleChange}/>
+                    {/*<TextField fullWidth label="Color" name="color"
+                               value={client.color} onChange={handleChange}/>
+                    <TextField fullWidth label="Year" name="year"
+                               value={client.year} onChange={handleChange}/>
+                    <TextField fullWidth label="Price" name="price"
+                               value={client.price} onChange={handleChange}/>*/}
                 </DialogContent>
                 <DialogActions>
                     <Button color="secondary" onClick={handleClose}>Cancel</Button>
@@ -54,4 +56,4 @@ const AddOffice = (props) => {
     );
 };
 
-export default AddOffice;
+export default AddClient;

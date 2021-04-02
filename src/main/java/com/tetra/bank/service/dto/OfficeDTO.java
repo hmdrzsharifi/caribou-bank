@@ -1,11 +1,15 @@
 package com.tetra.bank.service.dto;
 
 import java.time.Instant;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 
 //@JsonPropertyOrder({"id", "name","externalId", "openingDate" })
-public class OfficeDTO {
+public class OfficeDTO implements Serializable {
     private Long id;
 
+    @NotNull
+    @Size(max = 100)
     private String name;
 
     private String externalId;
@@ -13,6 +17,9 @@ public class OfficeDTO {
     private Instant openingDate;
 
     private Long parentId;
+
+   /* public OfficeDTO() {
+    }*/
 
     public Long getId() {
         return id;
@@ -50,7 +57,36 @@ public class OfficeDTO {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setParentId(Long officeId) {
+        this.parentId = officeId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OfficeDTO)) {
+            return false;
+        }
+
+        return id != null && id.equals(((OfficeDTO) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "OfficeDTO{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", openingDate='" + getOpeningDate() + "'" +
+            ", externalId='" + getExternalId() + "'" +
+            ", parentId=" + getParentId() +
+            "}";
     }
 }

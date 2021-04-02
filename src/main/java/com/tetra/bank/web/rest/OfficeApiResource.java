@@ -11,6 +11,7 @@ import com.tetra.bank.web.rest.errors.BadRequestAlertException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,8 @@ public class OfficeApiResource {
     private final Logger log = LoggerFactory.getLogger(OfficeApiResource.class);
 
     private static final String ENTITY_NAME = "office";
-
+//    @Value("${jhipster.clientApp.name}")
+//    private String applicationName;
     private final OfficeService officeService;
 
     private final OfficeRepository officeRepository;
@@ -62,18 +64,54 @@ public class OfficeApiResource {
         if (officeDTO.getId() != null) {
             throw new BadRequestAlertException("A new bankAccount cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Office office = officeMapper.toEntity(officeDTO);
-        if(officeDTO.getParentId() != null) {
+       // Office office = officeMapper.toEntity(officeDTO);
+        /*if(officeDTO.getParentId() != null) {
             Optional<Office> parentOffice = officeRepository.findById(officeDTO.getParentId());
             office.setParent(parentOffice.isPresent() ? parentOffice.get() : null);
-        }
-        office = officeRepository.save(office);
-        OfficeDTO result = officeMapper.toDto(office);
+        }*/
+       // office = officeRepository.save(office);
+      //  OfficeDTO result = officeMapper.toDto(office);
+
+        OfficeDTO result = officeService.save(officeDTO);
         return  ResponseEntity
                 .created(new URI("/api/offices/" + result.getId()))
 //                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
 
+    /**
+     * {@code PUT  /offices} : Updates an existing office.
+     *
+     * @param officeDTO the officeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated officeDTO,
+     * or with status {@code 400 (Bad Request)} if the officeDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the officeDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/offices")
+    public ResponseEntity<OfficeDTO> updateOffice(@Valid @RequestBody OfficeDTO officeDTO) throws URISyntaxException {
+        log.debug("REST request to update Office : {}", officeDTO);
+        if (officeDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        OfficeDTO result = officeService.save(officeDTO);
+        return ResponseEntity.ok()
+//                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, officeDTO.getId().toString()))
+                .body(result);
+    }
 
+    /**
+     * {@code DELETE  /offices/:id} : delete the "id" office.
+     *
+     * @param id the id of the officeDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/offices/{id}")
+    public ResponseEntity<Void> deleteOffice(@PathVariable Long id) {
+        log.debug("REST request to delete Office : {}", id);
+        officeService.delete(id);
+        return ResponseEntity.noContent()
+//                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
+    }
 }
